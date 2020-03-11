@@ -36,7 +36,7 @@ class TrnParams(object):
 
     def printParams(self):
         for iparameter in self.params:
-            print iparameter + ': ' + str(self.params[iparameter])
+            print(iparameter + ': ' + str(self.params[iparameter]))
 
     def getResultsPath(self):
         self.resultsPath = ''
@@ -45,7 +45,7 @@ class TrnParams(object):
 
 def ClassificationFolds(folder, n_folds=2, trgt=None, dev=False, verbose=False):
     if n_folds < 2:
-        print 'Invalid number of folds'
+        print ('Invalid number of folds')
         return -1
 
     if not dev:
@@ -55,10 +55,10 @@ def ClassificationFolds(folder, n_folds=2, trgt=None, dev=False, verbose=False):
 
     if not os.path.exists(file_name):
         if verbose:
-            print "Creating %s" % (file_name)
+            print ("Creating %s" % (file_name))
 
         if trgt is None:
-            print 'Invalid trgt'
+            print ('Invalid trgt')
             return -1
 
         CVO = model_selection.StratifiedKFold(trgt, n_folds)
@@ -66,7 +66,7 @@ def ClassificationFolds(folder, n_folds=2, trgt=None, dev=False, verbose=False):
         joblib.dump([CVO], file_name, compress=9)
     else:
         if verbose:
-            print "File %s exists" % (file_name)
+            print ("File %s exists" % (file_name))
         [CVO] = joblib.load(file_name)
 
     return CVO
@@ -137,7 +137,7 @@ class NeuralClassificationTrnParams(TrnParams):
 
 def NoveltyDetectionFolds(folder, n_folds=2, trgt=None, dev=False, verbose=False):
     if n_folds < 2:
-        print 'Invalid number of folds'
+        print ('Invalid number of folds')
         return -1
 
     if not dev:
@@ -147,10 +147,10 @@ def NoveltyDetectionFolds(folder, n_folds=2, trgt=None, dev=False, verbose=False
 
     if not os.path.exists(file_name):
         if verbose:
-            print "Creating %s" % (file_name)
+            print ("Creating %s" % (file_name))
 
         if trgt is None:
-            print 'Invalid trgt'
+            print ('Invalid trgt')
             return -1
 
         CVO = {}
@@ -160,13 +160,13 @@ def NoveltyDetectionFolds(folder, n_folds=2, trgt=None, dev=False, verbose=False
             CVO[inovelty] = skf.split(X=np.zeros(process_trgt.shape), y=process_trgt)
             CVO[inovelty] = list(CVO[inovelty])
         if verbose:
-            print 'Saving in %s' % (file_name)
+            print ('Saving in %s' % (file_name))
 
         joblib.dump([CVO], file_name, compress=9)
 
     else:
         if verbose:
-            print "Reading from %s" % (file_name)
+            print ("Reading from %s" % (file_name))
 
         [CVO] = joblib.load(file_name)
 

@@ -323,8 +323,8 @@ class KerasModel(_CNNModel):
                                      )
 
             if np.array(history.history[restart_monitor]).max() < restart_tol:
-                print "Max: %f" % np.array(history.history[restart_monitor]).max()
-                print "Restarting"
+                print ("Max: %f" % np.array(history.history[restart_monitor]).max())
+                print ("Restarting")
                 self.build()  # reset model
                 max_restarts -= 1
             else:
@@ -451,8 +451,8 @@ class OldKerasModel(_CNNModel):
                                      )
 
             if np.array(history.history[restart_monitor]).max() < restart_tol:
-                print "Max: %f" % np.array(history.history[restart_monitor]).max()
-                print "Restarting"
+                print ("Max: %f" % np.array(history.history[restart_monitor]).max())
+                print ("Restarting")
                 self.build()  # reset model
                 max_restarts -= 1
             else:
@@ -592,7 +592,7 @@ class BaseNNClassifier(BaseEstimator, ClassifierMixin):
         # X,y = self.LofarObj.transform(X)
 
         self.input_shape = X.shape[1:]
-        print self.input_shape
+        print (self.input_shape)
         trnParams, callbacks, filepath = self._buildParameters()
         keras_callbacks = callbacks.toKerasFn()
         model = SequentialModelWrapper(trnParams,
@@ -600,7 +600,7 @@ class BaseNNClassifier(BaseEstimator, ClassifierMixin):
         best_weigths_path = os.path.join(filepath, 'best_weights')
 
         if exists(best_weigths_path):
-            print "Model trained, loading best weights"
+            print ("Model trained, loading best weights")
             model.build_model()
         else:
             for init in range(n_inits):
@@ -609,7 +609,7 @@ class BaseNNClassifier(BaseEstimator, ClassifierMixin):
                 #         print callback.best
 
                 model.build_model()
-                print model.model.summary()
+                print (model.model.summary())
 
                 # print model.model.optimizer.weights
                 # before = model.model.get_weights()
@@ -1218,7 +1218,7 @@ class MLPClassifier(BaseEstimator, ClassifierMixin):
         if self.log_history:
             csvlog = {"type": "CSVLogger", "filename": os.path.join(filepath, 'history.csv')}
             callbacks.append(csvlog)
-        print callbacks
+        print (callbacks)
         callbacks_list = TrainParameters.Callbacks()
         callbacks_list.add(callbacks)
         return trnParams, callbacks_list, filepath
@@ -1286,7 +1286,7 @@ class MLPClassifier(BaseEstimator, ClassifierMixin):
             warnings.warn("Number of initializations must be at least one."
                           "Falling back to one")
             n_inits = 1
-        print class_weights
+        print (class_weights)
         trnParams, callbacks, filepath = self._buildParameters()
         keras_callbacks = callbacks.toKerasFn()
         model = SequentialModelWrapper(trnParams,
@@ -1294,7 +1294,7 @@ class MLPClassifier(BaseEstimator, ClassifierMixin):
         best_weigths_path = os.path.join(filepath, 'best_weights')
 
         if exists(best_weigths_path):
-            print "Model trained, loading best weights"
+            print ("Model trained, loading best weights")
             model.build_model()
         else:
             for init in range(n_inits):

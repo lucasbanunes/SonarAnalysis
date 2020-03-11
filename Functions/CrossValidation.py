@@ -153,11 +153,11 @@ class SonarRunsKFold(BaseCrossValidator):
             if self.dev:
                 offsets = list(map(lambda x: x[0], run_indices))
                 lengths = list(map(len, run_indices))
-                print class_folder
-                print "\tLength\tOffset"
+                print(class_folder)
+                print("\tLength\tOffset")
                 for (i, length), offset in zip(enumerate(lengths), offsets):
-                    print "Run %i:\t%i\t%i" % (i, length, offset)
-                print "Total: \t%i\n" % (sum(lengths))
+                    print("Run %i:\t%i\t%i" % (i, length, offset))
+                print("Total: \t%i\n" % (sum(lengths)))
 
             class_offset = class_offset + sum(map(len, run_indices))
 
@@ -169,11 +169,11 @@ class SonarRunsKFold(BaseCrossValidator):
             validation_runs = {}
             cls_min_runs = np.amin(map(len, self.runs.values()))  # get class with minimum number of runs
             if self.dev:
-                print "N of Runs for test fold:"
+                print("N of Runs for test fold:")
             for class_folder in self.runs:
                 validation_runs[class_folder] = int(round(len(self.runs[class_folder]) / float(cls_min_runs)))
                 if self.dev:
-                    print "%s -> %i" % (class_folder, validation_runs[class_folder])
+                    print("%s -> %i" % (class_folder, validation_runs[class_folder]))
         self.validation_runs = validation_runs
 
     def _iter_test_indices(self, X=None, y=None, groups=None, dev=False):
@@ -191,10 +191,10 @@ class SonarRunsKFold(BaseCrossValidator):
             test_indices = np.array(test_indices)
 
             test_indices = np.concatenate(test_indices)
-            print test_indices.shape
+            print(test_indices.shape)
 
             if dev:
-                print "\n\tTest Fold Size-> %i (%f%%)" % (test_indices.shape[0], float(test_indices.shape[0]) / 77561)
+                print("\n\tTest Fold Size-> %i (%f%%)" % (test_indices.shape[0], float(test_indices.shape[0]) / 77561))
 
             yield test_indices
 

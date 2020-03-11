@@ -52,6 +52,9 @@ def lofar(data, fs, n_pts_fft=1024, n_overlap=0,
     if not isinstance(data, np.ndarray):
         raise NotImplementedError
 
+
+    print(decimation_rate)
+    print(type(decimation_rate))
     if decimation_rate > 1:
         dec_data = decimate(data, decimation_rate, 10, 'fir', zero_phase=True)
         Fs = fs/decimation_rate
@@ -60,7 +63,7 @@ def lofar(data, fs, n_pts_fft=1024, n_overlap=0,
         Fs=fs
     freq, time, power = spectrogram(dec_data,
                                     window=('hann'),
-                                    nperseg=n_pts_fft,
+                                    nperseg=int(n_pts_fft),
                                     noverlap=n_overlap,
                                     nfft=n_pts_fft,
                                     fs=Fs,
@@ -79,5 +82,3 @@ def lofar(data, fs, n_pts_fft=1024, n_overlap=0,
     freq = freq[:spectrum_bins_left]
 
     return np.transpose(power), freq, time
-
-

@@ -47,7 +47,7 @@ def recall_score_novelty(trgt, model_output, novelty_cls, class_labels, average=
     for cls in keys:
         if cls == novelty_cls:
             continue
-        print trgt
+        print(trgt)
         correct_trgt = trgt[trgt == cls]
         cls_out = model_output[trgt == cls]
         correct_outputs = cls_out == correct_trgt

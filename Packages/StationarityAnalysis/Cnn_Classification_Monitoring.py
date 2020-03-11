@@ -146,9 +146,9 @@ def train_fold(data):
     i_fold, train, test, nv_cls, X, y, s_info, cachedir = data
     window_qtd = int(sys.argv[1])
     window_qtd_stride = 5
-    print window_qtd
-    print i_fold
-    print nv_cls
+    print(window_qtd)
+    print(i_fold)
+    print(nv_cls)
     X_train, y_train = lofar2image(X, y, train, window_qtd, window_qtd_stride, s_info)
     X_test, y_test = lofar2image(X, y, test, window_qtd, window_qtd, s_info)
     if verbose:
@@ -205,6 +205,6 @@ pool = None
 results = lofar_iter(estimator, novelty_detectionCV, pool, verbose)
 stop = time.time()
 
-print stop - start
+print(stop - start)
 
 pd.DataFrame(results).to_csv('./results_%s_windows.csv' % sys.argv[1])

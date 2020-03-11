@@ -17,7 +17,7 @@ class LofarDataset(object):
         # Check if LofarData has been created
         if not os.path.exists('%s/%s/lofar_data_file_fft_overlap_%i_%i_decimation_%i_spectrum_left_%i.jbl' %
                               (data_path, database, n_pts_fft, overlap_fft, decimation_rate, spectrum_bins_left)):
-            print 'No Files in %s/%s\n' % (data_path, database)
+            print('No Files in %s/%s\n' % (data_path, database))
             return
         else:
             # Read lofar data
@@ -46,8 +46,8 @@ class DataHandlerFunctions(object):
         self.name = 'DataHandler Class'
 
     def CreateEventsForClass(self, data, n_events, method='reply'):
-        print '%s: CreateEventsForClass' % (self.name)
-        print 'Original Size: (%i, %i)' % (data.shape[0], data.shape[1])
+        print('%s: CreateEventsForClass' % (self.name))
+        print('Original Size: (%i, %i)' % (data.shape[0], data.shape[1]))
         if n_events == 0:
             return data
         else:
@@ -69,9 +69,9 @@ class DataBalancer(DataHandlerFunctions):
                 qtd_events_biggest_class = sum(trgt == iclass)
                 biggest_class_label = class_label
             if verbose:
-                print "Qtd event of %s is %i" % (class_label, sum(trgt == iclass))
+                print("Qtd event of %s is %i" % (class_label, sum(trgt == iclass)))
         if verbose:
-            print "\nBiggest class is %s with %i events" % (biggest_class_label, qtd_events_biggest_class)
+            print("\nBiggest class is %s with %i events" % (biggest_class_label, qtd_events_biggest_class))
 
         return qtd_events_biggest_class, biggest_class_label
 

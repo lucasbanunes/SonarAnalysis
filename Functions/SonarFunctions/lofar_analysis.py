@@ -23,10 +23,10 @@ class LofarAnalysis:
         #input_db_path = os.path.join(inputpath, database)
         output_db_path = os.path.join(outputpath, database)
 
-        decimation_rate = self.decimation_rate
-        n_pts_fft = self.stftargs['n_pts_fft']
-        n_overlap = self.stftargs['n_overlap']
-        spectrum_bins_left = self.spectrum_bins_left
+        decimation_rate = int(self.decimation_rate)
+        n_pts_fft = int(self.stftargs['n_pts_fft'])
+        n_overlap = int(self.stftargs['n_overlap'])
+        spectrum_bins_left = int(self.spectrum_bins_left)
         lofar_data = self._from_raw_data(raw_data, fs_data, verbose)
 
         if spectrum_bins_left is 'auto':
@@ -44,10 +44,10 @@ class LofarAnalysis:
         return lofar_data
 
     def _from_raw_data(self, raw_data, fs, verbose=0):
-        decimation_rate = self.decimation_rate
-        n_pts_fft = self.stftargs['n_pts_fft']
-        n_overlap = self.stftargs['n_overlap']
-        spectrum_bins_left = self.spectrum_bins_left
+        decimation_rate = int(self.decimation_rate)
+        n_pts_fft = int(self.stftargs['n_pts_fft'])
+        n_overlap = int(self.stftargs['n_overlap'])
+        spectrum_bins_left = int(self.spectrum_bins_left)
 
         lofar_data = list()
         lofar_trgt = list()
@@ -59,7 +59,7 @@ class LofarAnalysis:
                                          fs=fs[cls][run],
                                          n_pts_fft=n_pts_fft,
                                          n_overlap=n_overlap,
-                                         decimation_rate=decimation_rate,
+                                         decimation_rate=int(decimation_rate),
                                          spectrum_bins_left=spectrum_bins_left,
                                          **self.tpswargs)
                 #lofar_data[cls] = dict()

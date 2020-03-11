@@ -46,20 +46,20 @@ elif [[ "$USER" == "pedrolisboa" ]]; then
     fi
 fi
 
-export OUTPUTDATAPATH=$SONAR_WORKSPACE/Results
-export PYTHONPATH=$SONAR_WORKSPACE:$PYTHONPATH
+export OUTPUTDATAPATH=/home/lucas/SonarAnalysis/Results
+export PYTHONPATH=/home/lucas/SonarAnalysis:$PYTHONPATH
 
-export MY_PATH=$SONAR_WORKSPACE
+export MY_PATH=/home/lucas/SonarAnalysis
 
 # Folder Configuration
 if [ -d "$OUTPUTDATAPATH" ]; then
-    cd $SONAR_WORKSPACE
+    cd /home/lucas/SonarAnalysis
     #read -e -p "Folder $OUTPUTDATAPATH exist, Do you want to erase it? [Y,n] " yn_erase
     #if [ "$yn_erase" = "Y" ]; then
     #    echo "creating OUTPUTDATAPATH struct"
     #    rm -rf $OUTPUTDATAPATH
     #    mkdir $OUTPUTDATAPATH
-    #    cd $SONAR_WORKSPACE/Packages
+    #    cd /home/lucas/SonarAnalysis/Packages
     #    for i in $(ls -d */); do mkdir $OUTPUTDATAPATH/${i%%/}; done
     #fi
 else
@@ -67,7 +67,7 @@ else
     echo "creating OUTPUTDATAPATH struct"
     rm -rf $OUTPUTDATAPATH
     mkdir $OUTPUTDATAPATH
-    cd $SONAR_WORKSPACE/Packages
+    cd /home/lucas/SonarAnalysis/Packages
     for i in $(ls -d */); do mkdir $OUTPUTDATAPATH/${i%%/}; done
 fi
 

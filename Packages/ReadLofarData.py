@@ -19,11 +19,11 @@ import numpy as np
 from scipy.io import loadmat
 from sklearn.externals import joblib
 
-print 'Starting '+os.path.basename(__file__)
+print('Starting '+os.path.basename(__file__))
 
 # System var. point to external folders
-datapath = os.getenv('OUTPUTDATAPATH')
-datapath = os.environ.get('OUTPUTDATAPATH')
+datapath = os.getenv('/home/lucas/SonarAnalysis/Lofar')
+datapath = os.environ.get('/home/lucas/SonarAnalysis/Lofar')
 
 # Variable to chance Database
 database = "4classes"
@@ -33,13 +33,14 @@ database = "4classes"
 # decimation_rate = 3;
 # spectrum_bins_left = 400;
 
-n_pts_fft = int(sys.argv[1])
-num_overlap = int(sys.argv[2])
-decimation_rate = int(sys.argv[3])
-spectrum_bins_left = int(sys.argv[4])
+n_pts_fft = int(sys.argv[1])  #used 1024
+num_overlap = int(sys.argv[2])  #used 0
+decimation_rate = int(sys.argv[3])  #used  3
+spectrum_bins_left = int(sys.argv[4])  #used 400
 
 
 if not os.path.exists("%s/%s/data_info_file.mat"%(datapath,database)):
+    print('No file: %s'%("%s/%s/data_info_file.mat"%(datapath,database)))
     exit()
 else:
     data_info = loadmat("%s/%s/data_info_file.mat"%(datapath,database))
@@ -50,7 +51,7 @@ else:
         class_labels[iclass] = str(data_info['data_info']['class_labels'][0][0][0][iclass][0])
         class_filename = ('lofar_data_file_fft_%i_overlap_%i_decimation_%i_spectrum_left_%i'%
                           (n_pts_fft,num_overlap, decimation_rate,spectrum_bins_left))
-        print "Reading class: %s"%(class_labels[iclass])
+        print("Reading class: %s"%(class_labels[iclass]))
         if not os.path.exists("%s/%s/%s/%s.mat"%(datapath,database,class_labels[iclass],class_filename)):
             #print "%s/%s/%s/%s.mat"%(datapath,database,class_labels[iclass],class_filename)
             exit()

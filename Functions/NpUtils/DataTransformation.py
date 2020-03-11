@@ -40,24 +40,26 @@ class SonarRunsInfo():
         for class_folder in self.class_folders:
             run_files = listfiles(self.inputdatapath + '/' + class_folder)
             run_files = list(run_files)
-            run_names = map(lambda x: str(x[:-4]), run_files) # remove .wav file extension
-            run_paths = map(lambda x: self.inputdatapath + '/' + class_folder + '/' + x, run_files)
+            run_names = list(map(lambda x: str(x[:-4]), run_files)) # remove .wav file extension / added list
+            run_paths = list(map(lambda x: self.inputdatapath + '/' + class_folder + '/' + x, run_files)) #added list
             run_names.sort()
             run_paths.sort()
             run_indices = list(self._iterClassIndices(run_paths, class_offset, window, overlap, decimation_rate))
             if self.verbose:
                 offsets = list(map(lambda x: x[0], run_indices))
                 lengths = list(map(len, run_indices))
-                print class_folder
-                print "\tLength\tOffset"
+                print(class_folder)
+                print("\tLength\tOffset")
                 for (i, length), offset in zip(enumerate(lengths), offsets):
-                    print "Run %i:\t%i\t%i" % (i, length, offset)
-                print "Total: \t%i\n" % (sum(lengths))
+                    print("Run %i:\t%i\t%i" % (i, length, offset))
+                print("Total: \t%i\n" % (sum(lengths)))
 
             class_offset = class_offset + sum(map(len, run_indices))
 
             self.runs[class_folder] = run_indices
             self.runs_named[class_folder] = {filename: indices for filename, indices in zip(run_names, run_indices)}
+            """for key, value in self.runs.items():
+                print(key,value)"""
 
     def _iterClassIndices(self, runpaths, class_offset, window, overlap=0, decimation_rate=1):
         run_offset = 0
@@ -71,8 +73,8 @@ class SonarRunsInfo():
             frames = runfile.getnframes()
             frames = frames//decimation_rate
             end_frame = (frames - overlap) / (window - overlap) + offset
-
-        return range(offset, end_frame)
+            
+        return range(offset, int(end_frame)) #added int(end_frame)
 
 
 class Lofar2Image(BaseEstimator, TransformerMixin):
@@ -106,8 +108,8 @@ class Lofar2Image(BaseEstimator, TransformerMixin):
 
     def set_params(self, **params):
         for key, value in params.items():
-            print key
-            print value
+            print(key)
+            print(value)
             setattr(self, key, value)
 
         return self
@@ -182,9 +184,9 @@ class Lofar2Image(BaseEstimator, TransformerMixin):
                                       for (run_trgt, run_name), run_data in self.extractRuns(X, y)})
 
         if self.verbose:
-            print "Runs found"
+            print ("Runs found")
             for key in self.separated_runs.keys():
-                print key
+                print (key)
 
         image_X, image_y = self._genImageDataset([(trgt, run)
                                                  for (trgt, _), run in separated_runs.items()])
@@ -192,9 +194,9 @@ class Lofar2Image(BaseEstimator, TransformerMixin):
         # print image_X.shape
         # print image_y.shape
 
-        print 'image shape'
-        print image_X.shape
-        print image_y.shape
+        print ('image shape')
+        print (image_X.shape)
+        print (image_y.shape)
 
         if self.channel_dim == 'first':
             image_X = image_X[np.newaxis, :, :, :]
@@ -270,8 +272,8 @@ def lofar2image(all_data, all_trgt,
         new_data = np.array(new_data.reshape(new_data.shape[0], new_data.shape[1], 1), np.float64)
         image_data[image_index] = new_data
         trgt_image[image_index] = all_trgt[spectre_index]
-    print 'trgt'
-    print np.unique(trgt_image)
+    print ('trgt')
+    print (np.unique(trgt_image))
     return [image_data, trgt_image]
 
 
@@ -291,3 +293,77 @@ def lofar_mean(data, trgt, sliding_window):
     return averaged_data
 
 
+def lofar2image_v2(data, target, window_size, stride, runs_info, verbose = False): #object
+    img_data = list()
+    trgt = np.array([])
+    for runs_array in runs_info.runs.values():
+        for run_range in runs_array:
+            run = data[run_range]
+            window_array = _get_window_array(window_size, 0, run.shape[0], stride)
+            run_start = run_range[0]
+            for window_range in window_array:
+                img_data.append(run[window_range])
+                trgt = np.append(trgt, target[run_start])
+    if verbose:
+        print(f'Windows of size {window_size} with stride {stride}')
+        for i, c in enumerate(runs_info.runs.keys()):
+            print(f'{c} with {len(trgt[trgt == i])} events')
+        print(f'Total of {len(trgt)} events')
+    return np.array(img_data), trgt    
+
+
+def _get_window_array(window_size, start, stop, stride):
+    window_array = list()
+    for i in range(start, stop, stride):
+        if i+window_size > stop:
+            #The end of the range overpasses the run window size
+            break
+        window_array.append(range(i, i+window_size))
+    return window_array
+
+
+def lofar2image_leave1out(data, target, window_size, stride, runs, verbose = False): #dict
+    img_data = list()
+    trgt = np.array([])
+    for runs_array in runs.values():
+        for run_range in runs_array:
+            run = data[run_range]
+            window_array = _get_window_array(window_size, 0, run.shape[0], stride)
+            run_start = run_range[0]
+            for window_range in window_array:
+                img_data.append(run[window_range])
+                trgt = np.append(trgt, target[run_start])
+    if verbose:
+        print(f'Windows of size {window_size} with stride {stride}')
+        for i, c in enumerate(runs.keys()):
+            print(f'{c} with {len(trgt[trgt == i])} events')
+        print(f'Total of {len(trgt)} events')
+    return np.array(img_data), trgt
+
+
+def lofar2image_leave1outv2(data, target, window_size, stride, runs, verbose = False): #array
+    img_data = list()
+    trgt = np.array([])
+    for run_range in runs:
+        run = data[run_range]
+        window_array = _get_window_array(window_size, 0, run.shape[0], stride)
+        run_start = run_range[0]
+        for window_range in window_array:
+            img_data.append(run[window_range])
+            trgt = np.append(trgt, target[run_start])
+    """if verbose:
+        print(f'Windows of size {window_size} with stride {stride}')
+        for i, c in enumerate(runs.keys()):
+            print(f'{c} with {len(trgt[trgt == i])} events')
+        print(f'Total of {len(trgt)} events')"""
+    return np.array(img_data), trgt
+    
+
+def _get_test_leave1out(run, target, window_size, stride, verbose=True):
+    img_data = list()
+    trgt = list()
+    window_array = _get_window_array(window_size, 0, run.shape[0], stride)
+    for window_range in window_array:
+        img_data.append(run[window_range])
+        trgt.append(target)
+    return np.array(img_data), np.array(trgt)

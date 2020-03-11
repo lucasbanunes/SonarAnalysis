@@ -27,7 +27,7 @@ def mkdir(filepath, overwrite=False):
         if overwrite:
             os.remove(filepath)
         else:
-            print "Folder already exists. To overwrite it, set overwrite to true"
+            print("Folder already exists. To overwrite it, set overwrite to true")
     os.makedirs(filepath)
 
 
