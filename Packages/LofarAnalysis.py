@@ -8,7 +8,7 @@
 from __future__ import division, print_function
 import os
 import sys
-sys.path.append(os.path.abspath(os.path.join('/home/lucas/Repositories', 'SonarAnalysis')))
+sys.path.append('/home/lucas_nunes/Repositories/SonarAnalysis')
 
 import joblib
 
@@ -20,7 +20,7 @@ from scipy.signal import spectrogram, decimate
 
 import numpy as np
 datapath = './'#os.getenv('OUTPUTDATAPATH')
-audiodatapath = '/home/lucas/Documentos/datasets'#os.getenv('INPUTDATAPATH')
+audiodatapath = '/home/lucas_nunes/Documentos/datasets'#os.getenv('INPUTDATAPATH')
 results_path = './'#os.getenv('PACKAGE_NAME')
 database = '4classes'
 
